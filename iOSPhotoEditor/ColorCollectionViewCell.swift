@@ -12,6 +12,8 @@ class ColorCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var colorView: UIView!
     
+    let ratio = 1.7
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -26,19 +28,20 @@ class ColorCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
+            let previouTransform =  colorView.transform
+           
             if isSelected {
-                let previouTransform =  colorView.transform
+                if(previouTransform.a > 1.0 && previouTransform.d > 1.0) {
+                    return
+                }
                 UIView.animate(withDuration: 0.2,
                                animations: {
-                                self.colorView.transform = self.colorView.transform.scaledBy(x: 1.3, y: 1.3)
-                },
-                               completion: { _ in
-                                UIView.animate(withDuration: 0.2) {
-                                    self.colorView.transform  = previouTransform
-                                }
+                    self.colorView.transform = self.colorView.transform.scaledBy(x: self.ratio, y: self.ratio)
                 })
             } else {
-                // animate deselection
+                UIView.animate(withDuration: 0.2) {
+                    self.colorView.transform  = self.colorView.transform.scaledBy(x: 1/self.ratio, y: 1/self.ratio)
+                }
             }
         }
     }

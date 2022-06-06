@@ -217,7 +217,6 @@ open class CropViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
         actionSheet.addAction(cancel)
-        
         if let popoverController = actionSheet.popoverPresentationController {
             popoverController.barButtonItem = sender
         }

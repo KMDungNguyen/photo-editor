@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 // MARK: - Control
-public enum control {
+public enum control: String {
     case crop
     case sticker
     case draw
@@ -18,6 +18,10 @@ public enum control {
     case save
     case share
     case clear
+
+    public func string() -> String {
+        return self.rawValue
+    }
 }
 
 extension PhotoEditorViewController {
@@ -87,6 +91,10 @@ extension PhotoEditorViewController {
     
     @IBAction func shareButtonTapped(_ sender: UIButton) {
         let activity = UIActivityViewController(activityItems: [canvasView.toImage()], applicationActivities: nil)
+        if let popoverController = activity.popoverPresentationController {
+            popoverController.barButtonItem = UIBarButtonItem(customView: sender)
+        }
+
         present(activity, animated: true, completion: nil)
         
     }
@@ -101,8 +109,8 @@ extension PhotoEditorViewController {
     }
     
     @IBAction func continueButtonPressed(_ sender: Any) {
-        let img = self.canvasView.toImage()
-        photoEditorDelegate?.doneEditing(image: img)
+        let image = self.canvasView.toImage()
+        photoEditorDelegate?.doneEditing(image: image)
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -115,25 +123,24 @@ extension PhotoEditorViewController {
     }
     
     func hideControls() {
-        for control in hiddenControls {
-            switch control {
-                
-            case .clear:
+        var controls = hiddenControls
+        
+        for control in controls {
+            if (control == "clear") {
                 clearButton.isHidden = true
-            case .crop:
+            } else if (control == "crop") {
                 cropButton.isHidden = true
-            case .draw:
+            } else if (control == "draw") {
                 drawButton.isHidden = true
-            case .save:
+            } else if (control == "save") {
                 saveButton.isHidden = true
-            case .share:
+            } else if (control == "share") {
                 shareButton.isHidden = true
-            case .sticker:
+            } else if (control == "sticker") {
                 stickerButton.isHidden = true
-            case .text:
-                stickerButton.isHidden = true
+            } else if (control == "text") {
+                textButton.isHidden = true
             }
         }
     }
-    
 }

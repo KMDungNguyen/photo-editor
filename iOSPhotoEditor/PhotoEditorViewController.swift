@@ -39,25 +39,25 @@ public final class PhotoEditorViewController: UIViewController {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     
-    public var image: UIImage?
+    @objc public var image: UIImage?
     /**
      Array of Stickers -UIImage- that the user will choose from
      */
-    public var stickers : [UIImage] = []
+    @objc public var stickers : [UIImage] = []
     /**
      Array of Colors that will show while drawing or typing
      */
-    public var colors  : [UIColor] = []
+    @objc public var colors  : [UIColor] = []
     
-    public var photoEditorDelegate: PhotoEditorDelegate?
+    @objc public var photoEditorDelegate: PhotoEditorDelegate?
     var colorsCollectionViewDelegate: ColorsCollectionViewDelegate!
     
     // list of controls to be hidden
-    public var hiddenControls : [control] = []
-    
+    @objc public var hiddenControls : [NSString] = []
+
     var stickersVCIsVisible = false
-    var drawColor: UIColor = UIColor.black
-    var textColor: UIColor = UIColor.white
+    var drawColor: UIColor = UIColor.red
+    var textColor: UIColor = UIColor.red
     var isDrawing: Bool = false
     var lastPoint: CGPoint!
     var swiped = false
@@ -123,6 +123,8 @@ public final class PhotoEditorViewController: UIViewController {
         colorsCollectionView.register(
             UINib(nibName: "ColorCollectionViewCell", bundle: Bundle(for: ColorCollectionViewCell.self)),
             forCellWithReuseIdentifier: "ColorCollectionViewCell")
+        
+        colorsCollectionView.selectItem(at: IndexPath(row: 6, section: 0), animated: true, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
     }
     
     func setImageView(image: UIImage) {
@@ -141,16 +143,15 @@ public final class PhotoEditorViewController: UIViewController {
 
 extension PhotoEditorViewController: ColorDelegate {
     func didSelectColor(color: UIColor) {
-        if isDrawing {
-            self.drawColor = color
-        } else if activeTextView != nil {
-            activeTextView?.textColor = color
-            textColor = color
-        }
+        self.drawColor = color
+        activeTextView?.textColor = color
+        textColor = color
+//        
+//        if isDrawing {
+//            self.drawColor = color
+//        } else if activeTextView != nil {
+//            activeTextView?.textColor = color
+//            textColor = color
+//        }
     }
 }
-
-
-
-
-
